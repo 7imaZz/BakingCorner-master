@@ -1,123 +1,98 @@
 package com.example.bakingcorner.ui;
 
 
-import android.annotation.SuppressLint;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.borjabravo.readmoretextview.ReadMoreTextView;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.VideoView;
+
+import com.example.bakingcorner.Model.CakeModel;
 import com.example.bakingcorner.Model.Steps;
 import com.example.bakingcorner.R;
-import com.google.android.exoplayer2.DefaultLoadControl;
-import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.RenderersFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.PlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultAllocator;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class StepsFragment extends Fragment {
 
-
-    private PlayerView playerView;
-    private ReadMoreTextView descriptionTextView;
-
-    private ExoPlayer exoPlayer;
+    private ListView listView;
 
     public StepsFragment() {
         // Required empty public constructor
     }
 
 
-    @SuppressLint({"SetTextI18n", "SetJavaScriptEnabled"})
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_steps, container, false);
 
-        View rootView = inflater.inflate(R.layout.fragment_steps, container, false);
-
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        Bundle bundle = this.getArguments();
-
-        assert bundle != null;
-        Steps currentStep = (Steps) bundle.getSerializable("step");
-
-        playerView = rootView.findViewById(R.id.video);
-        descriptionTextView = rootView.findViewById(R.id.tv_desc);
-
-        assert currentStep != null;
-        descriptionTextView.setText(currentStep.getShortDescription()+"\n\n"+currentStep.getDescription());
-
-        if (currentStep.getVideoUrl().equals("")){
-            playerView.setVisibility(View.GONE);
+        if (getActivity().getIntent().getSerializableExtra("cake")==null){
+            return view;
         }
 
-        LoadControl loadControl = new DefaultLoadControl(new DefaultAllocator(true, 16)
-                , 3000,
-                5000,
-                1500,
-                5000,
-                -1,
-                true);
+        final CakeModel currentCake = (CakeModel) getActivity().getIntent().getSerializableExtra("cake");
+        listView = view.findViewById(R.id.lv_steps);
 
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-
-        TrackSelection.Factory factory = new AdaptiveTrackSelection.Factory(bandwidthMeter);
-
-        TrackSelector trackSelector = new DefaultTrackSelector(factory);
-
-        RenderersFactory renderersFactory = new DefaultRenderersFactory(getContext());
-
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector, loadControl);
-        play(currentStep.getVideoUrl());
+        List<Steps> steps = currentCake.getSteps();
+        List<String> stepsDesc = new ArrayList<>();
 
 
-        return rootView;
+        for (int i=0; i<steps.size(); i++){
+            stepsDesc.add(steps.get(i).getShortDescription());
+        }
+
+        ArrayAdapter adapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_1, stepsDesc);
+
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                DisplayMetrics metrics = new DisplayMetrics();
+                getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("step", currentCake.getSteps().get(i));
+
+                VideoFragment fragment = new VideoFragment();
+                fragment.setArguments(bundle);
+
+                float yInches= metrics.heightPixels/metrics.ydpi;
+                float xInches= metrics.widthPixels/metrics.xdpi;
+                double diagonalInches = Math.sqrt(xInches*xInches + yInches*yInches);
+                if (diagonalInches>=6.5){
+                    // 6.5inch device or bigger
+                    VideoFragment.currentStep = currentCake.getSteps().get(i);
+                }else{
+                    // smaller device
+                    DetailsActivity.manager.beginTransaction()
+                            .replace(R.id.fragment, fragment)
+                            .commit();
+                }
+
+
+
+            }
+        });
+
+
+        return view;
     }
 
-    public void play(String url){
-
-        DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-
-        DataSource.Factory factory = new DefaultDataSourceFactory(getContext()
-                ,Util.getUserAgent(getContext(), getContext().getString(R.string.app_name))
-                , bandwidthMeter);
-
-        MediaSource mediaSource = new ExtractorMediaSource.Factory(factory)
-                .createMediaSource(Uri.parse(url));
-
-        exoPlayer.prepare(mediaSource);
-        exoPlayer.setPlayWhenReady(true);
-        playerView.setPlayer(exoPlayer);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        exoPlayer.stop();
-        exoPlayer.release();
-    }
 }

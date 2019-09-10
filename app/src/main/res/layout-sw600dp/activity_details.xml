@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.DetailsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/fragment_a"
+            android:name="com.example.bakingcorner.ui.DetailsFragment"
+            tools:layout="@layout/fragment_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </fragment>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <fragment
+                android:id="@+id/fragment_c"
+                android:name="com.example.bakingcorner.ui.StepsFragment"
+                tools:layout="@layout/fragment_steps"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+            </fragment>
+
+            <fragment
+                android:id="@+id/fragment_b"
+                android:name="com.example.bakingcorner.ui.VideoFragment"
+                tools:layout="@layout/fragment_video"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+            </fragment>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -5,7 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.DetailsActivity"
-    android:id="@+id/container">
+    tools:context=".ui.DetailsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:id="@+id/tv_det"
+            android:text="@string/ingredients"
+            android:textSize="20sp"
+            android:textColor="#FFF"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:id="@+id/tv_steps"
+            android:background="@color/colorPrimary"
+            android:text="@string/steps"
+            android:textSize="20sp"
+            android:textColor="#FFF"
+            android:gravity="center"
+            android:layout_marginStart="2dp"/>
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/fragment"
+        android:name="com.example.bakingcorner.ui.DetailsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 
 </LinearLayout>

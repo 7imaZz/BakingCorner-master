@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.VideoFragment"
+    android:background="#FFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.exoplayer2.ui.PlayerView
+            android:id="@+id/video"
+            android:layout_width="match_parent"
+            android:layout_height="240dp" />
+
+        <com.borjabravo.readmoretextview.ReadMoreTextView
+            android:id="@+id/tv_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="18sp"
+            android:textColor="#000"
+            app:trimExpandedText="Show More"
+            app:trimCollapsedText="Show Less"
+            app:trimMode="trimModeLength"
+            app:trimLength="60"
+            app:colorClickableText="@android:color/holo_blue_light"/>
+    </LinearLayout>
+
+</FrameLayout>

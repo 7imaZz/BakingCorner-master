@@ -1,28 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:context=".ui.StepsFragment">
+    tools:context=".ui.StepsFragment"
+    android:background="#FFF">
 
-    <com.google.android.exoplayer2.ui.PlayerView
-        android:id="@+id/video"
+
+    <ListView
+        android:id="@+id/lv_steps"
         android:layout_width="match_parent"
-        android:layout_height="240dp" />
+        android:layout_height="match_parent" />
 
-    <com.borjabravo.readmoretextview.ReadMoreTextView
-        android:id="@+id/tv_desc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textSize="18sp"
-        android:textColor="#000"
-        app:trimExpandedText="Show More"
-        app:trimCollapsedText="Show Less"
-        app:trimMode="trimModeLength"
-        app:trimLength="60"
-        app:colorClickableText="@android:color/holo_blue_light"/>
-
-</LinearLayout>
+</FrameLayout>

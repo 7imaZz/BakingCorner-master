@@ -35,20 +35,12 @@ public class CakesAdapter extends RecyclerView.Adapter<CakesAdapter.CakesViewHol
 
 
     private List<CakeModel> cakes;
-    private List<Steps> steps;
     private Context context;
-    private int flag = 0;
 
 
     public CakesAdapter(Context context, List<CakeModel> cakes) {
         this.cakes = cakes;
         this.context = context;
-    }
-
-    public CakesAdapter(Context context, List<Steps> steps, int flag) {
-        this.steps = steps;
-        this.context = context;
-        this.flag = flag;
     }
 
     @NonNull
@@ -63,12 +55,10 @@ public class CakesAdapter extends RecyclerView.Adapter<CakesAdapter.CakesViewHol
     public void onBindViewHolder(@NonNull CakesViewHolder holder, int position) {
 
 
-        if (flag == 0){
-            final CakeModel currentCake = cakes.get(position);
+        final CakeModel currentCake = cakes.get(position);
 
-            holder.cakeNameTextView.setText(currentCake.getName());
-
-            holder.cakeNameTextView.setOnClickListener(new View.OnClickListener() {
+        holder.cakeNameTextView.setText(currentCake.getName());
+        holder.cakeNameTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(context, DetailsActivity.class);
@@ -76,39 +66,11 @@ public class CakesAdapter extends RecyclerView.Adapter<CakesAdapter.CakesViewHol
                     context.startActivity(intent);
                 }
             });
-        }else {
-
-            final Steps currentStep = steps.get(position);
-
-            holder.cakeNameTextView.setText(currentStep.getShortDescription());
-
-            holder.cakeNameTextView.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary));
-
-            holder.cakeNameTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("step", currentStep);
-
-                    StepsFragment stepsFragment = new StepsFragment();
-                    stepsFragment.setArguments(bundle);
-
-                    DetailsActivity.manager
-                            .beginTransaction()
-                            .replace(R.id.container, stepsFragment).commit();
-                }
-            });
-        }
 
     }
 
     @Override
     public int getItemCount() {
-        if (flag ==0){
-            return cakes.size();
-        }else {
-            return steps.size();
-        }
+        return cakes.size();
     }
 }
