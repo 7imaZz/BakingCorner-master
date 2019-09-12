@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.borjabravo.readmoretextview.ReadMoreTextView;
 import com.example.bakingcorner.Model.Steps;
@@ -41,6 +42,7 @@ public class VideoFragment extends Fragment {
 
     private PlayerView playerView;
     private ReadMoreTextView descriptionTextView;
+    private Button backButton;
 
     private ExoPlayer exoPlayer;
 
@@ -67,6 +69,7 @@ public class VideoFragment extends Fragment {
 
         playerView = view.findViewById(R.id.video);
         descriptionTextView = view.findViewById(R.id.tv_desc);
+        backButton = view.findViewById(R.id.btn_back_to_steps);
 
         assert currentStep != null;
         descriptionTextView.setText(currentStep.getShortDescription()+"\n\n"+currentStep.getDescription());
@@ -94,6 +97,17 @@ public class VideoFragment extends Fragment {
         exoPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector, loadControl);
         play(currentStep.getVideoUrl());
 
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StepsFragment stepsFragment = new StepsFragment();
+
+                DetailsActivity.manager.beginTransaction()
+                        .replace(R.id.fragment, stepsFragment)
+                        .commit();
+            }
+        });
+
         return view;
     }
 
@@ -120,4 +134,10 @@ public class VideoFragment extends Fragment {
         exoPlayer.release();
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        exoPlayer.stop();
+        exoPlayer.release();
+    }
 }

@@ -7,7 +7,7 @@
     tools:context=".ui.VideoFragment"
     android:background="#FFF">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -28,7 +28,15 @@
             app:trimCollapsedText="Show Less"
             app:trimMode="trimModeLength"
             app:trimLength="60"
-            app:colorClickableText="@android:color/holo_blue_light"/>
-    </LinearLayout>
+            app:colorClickableText="@android:color/holo_blue_light"
+            android:layout_below="@+id/video"/>
+
+        <Button
+            android:id="@+id/btn_back_to_steps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/back_label"/>
+    </RelativeLayout>
 
 </FrameLayout>

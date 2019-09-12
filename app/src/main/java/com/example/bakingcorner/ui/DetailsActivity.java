@@ -11,14 +11,9 @@ import androidx.fragment.app.FragmentManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.bakingcorner.Model.CakeModel;
 import com.example.bakingcorner.R;
-
 import java.io.Serializable;
 
 public class DetailsActivity extends AppCompatActivity implements Serializable{
